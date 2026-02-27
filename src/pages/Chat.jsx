@@ -54,15 +54,23 @@ export default function Chat() {
   };
 
   const createNewConversation = async () => {
+    const user = await base44.auth.me();
     const conv = await base44.agents.createConversation({
       agent_name: "cartly_agent",
       metadata: { name: "New Chat" },
     });
-    setConversations((prev) => [conv, ...prev]);
-    setActiveConversation(conv);
+    const record = await base44.entities.Conversation.create({
+      agent_conversation_id: conv.id,
+      name: "New Chat",
+      user_email: user.email,
+      is_deleted: false,
+    });
+    const enriched = { ...conv, _record: record };
+    setConversations((prev) => [enriched, ...prev]);
+    setActiveConversation(enriched);
     setMessages([]);
     setSidebarOpen(false);
-    return conv;
+    return enriched;
   };
 
   const selectConversation = async (conv) => {
