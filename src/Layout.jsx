@@ -56,13 +56,22 @@ export default function Layout({ children, currentPageName }) {
             })}
           </nav>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="hidden md:block text-sm text-gray-500 font-medium">{user.full_name || user.email}</span>
+            <button
+              onClick={() => base44.auth.logout()}
+              className="hidden md:block text-xs text-gray-400 hover:text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-all"
+            >
+              Sign out
+            </button>
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Nav */}
