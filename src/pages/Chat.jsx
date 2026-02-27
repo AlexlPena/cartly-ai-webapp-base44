@@ -110,6 +110,9 @@ export default function Chat() {
       prompt: `Generate a short, concise chat title (3-5 words max) for a grocery assistant conversation that starts with this message: "${firstMessage}". Return only the title, no quotes or punctuation.`,
     });
     const title = (typeof result === "string" ? result : result?.text || "New Chat").trim();
+    if (conv?._record?.id) {
+      await base44.entities.Conversation.update(conv._record.id, { name: title });
+    }
     setConversations((prev) => prev.map((c) => c.id === conv.id ? { ...c, metadata: { ...c.metadata, name: title } } : c));
     setActiveConversation((prev) => prev?.id === conv.id ? { ...prev, metadata: { ...prev.metadata, name: title } } : prev);
   };
