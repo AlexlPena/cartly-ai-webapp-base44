@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { Send, Plus, MessageSquare, Trash2, ChevronLeft, Sparkles } from "lucide-react";
 import MessageBubble from "@/components/chat/MessageBubble";
 import ConversationList from "@/components/chat/ConversationList";
-import SignUpPrompt from "@/components/chat/SignUpPrompt";
 
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
@@ -13,26 +12,12 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
-  const [guestMessageCount, setGuestMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const FREE_MESSAGE_LIMIT = 3;
-
   useEffect(() => {
-    const checkAuth = async () => {
-      const authenticated = await base44.auth.isAuthenticated();
-      setIsGuest(!authenticated);
-      if (!authenticated) {
-        // For guests, we don't load conversations (they have none)
-        setLoadingConversations(false);
-      } else {
-        loadConversations();
-      }
-    };
-    checkAuth();
+    loadConversations();
+    // Handle query param
     const params = new URLSearchParams(window.location.search);
     const q = params.get("q");
     if (q) setInput(q);
@@ -88,13 +73,6 @@ export default function Chat() {
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
-
-    // Guest limit check
-    if (isGuest && guestMessageCount >= FREE_MESSAGE_LIMIT) {
-      setShowSignUpPrompt(true);
-      return;
-    }
-
     setInput("");
     setLoading(true);
 
@@ -105,15 +83,6 @@ export default function Chat() {
 
     // Optimistic user message
     setMessages((prev) => [...prev, { role: "user", content: text }]);
-
-    if (isGuest) {
-      const newCount = guestMessageCount + 1;
-      setGuestMessageCount(newCount);
-      if (newCount >= FREE_MESSAGE_LIMIT) {
-        // Show prompt after this message is sent
-        setTimeout(() => setShowSignUpPrompt(true), 2000);
-      }
-    }
 
     await base44.agents.addMessage(conv, { role: "user", content: text });
     setLoading(false);
@@ -128,7 +97,6 @@ export default function Chat() {
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-[#F7F9F7]">
-      {showSignUpPrompt && <SignUpPrompt onDismiss={() => setShowSignUpPrompt(false)} />}
       {/* Sidebar */}
       <div
         className={`${
