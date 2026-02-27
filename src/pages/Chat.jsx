@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { Send, Plus, MessageSquare, Trash2, ChevronLeft, Sparkles } from "lucide-react";
 import MessageBubble from "@/components/chat/MessageBubble";
 import ConversationList from "@/components/chat/ConversationList";
+import SignUpPrompt from "@/components/chat/SignUpPrompt";
 
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
