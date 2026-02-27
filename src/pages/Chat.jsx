@@ -88,6 +88,13 @@ export default function Chat() {
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
+
+    // Guest limit check
+    if (isGuest && guestMessageCount >= FREE_MESSAGE_LIMIT) {
+      setShowSignUpPrompt(true);
+      return;
+    }
+
     setInput("");
     setLoading(true);
 
@@ -98,6 +105,15 @@ export default function Chat() {
 
     // Optimistic user message
     setMessages((prev) => [...prev, { role: "user", content: text }]);
+
+    if (isGuest) {
+      const newCount = guestMessageCount + 1;
+      setGuestMessageCount(newCount);
+      if (newCount >= FREE_MESSAGE_LIMIT) {
+        // Show prompt after this message is sent
+        setTimeout(() => setShowSignUpPrompt(true), 2000);
+      }
+    }
 
     await base44.agents.addMessage(conv, { role: "user", content: text });
     setLoading(false);
