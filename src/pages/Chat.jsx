@@ -37,18 +37,21 @@ export default function Chat() {
 
   const loadConversations = async () => {
     setLoadingConversations(true);
+    const user = await base44.auth.me();
     const [convs, convRecords] = await Promise.all([
       base44.agents.listConversations({ agent_name: "cartly_agent" }),
-      base44.entities.Conversation.filter({ is_deleted: false }),
+      base44.entities.Conversation.filter({ is_deleted: false, user_email: user.email }),
     ]);
-    // Merge persisted names into agent conversations
+    // Only show conversations that belong to this user (matched by DB record)
     const recordMap = {};
     (convRecords || []).forEach((r) => { recordMap[r.agent_conversation_id] = r; });
-    const merged = (convs || []).map((c) => ({
-      ...c,
-      metadata: { ...c.metadata, name: recordMap[c.id]?.name || c.metadata?.name || "New Chat" },
-      _record: recordMap[c.id] || null,
-    }));
+    const merged = (convs || [])
+      .filter((c) => recordMap[c.id]) // only show convs with a DB record for this user
+      .map((c) => ({
+        ...c,
+        metadata: { ...c.metadata, name: recordMap[c.id]?.name || c.metadata?.name || "New Chat" },
+        _record: recordMap[c.id] || null,
+      }));
     setConversations(merged);
     setLoadingConversations(false);
   };
