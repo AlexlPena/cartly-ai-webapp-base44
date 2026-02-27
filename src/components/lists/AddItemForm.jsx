@@ -70,12 +70,23 @@ export default function AddItemForm({ onAdd, onCancel }) {
       </div>
 
       {showMore && (
-        <input
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Notes (optional)…"
-          className="w-full mb-3 px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-600 placeholder-gray-400 outline-none focus:border-green-300 transition-all"
-        />
+        <div className="space-y-2 mb-3">
+          <input
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Notes (optional)…"
+            className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-600 placeholder-gray-400 outline-none focus:border-green-300 transition-all"
+          />
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-gray-400 whitespace-nowrap">Expiry date:</label>
+            <input
+              type="date"
+              value={expirationDate}
+              onChange={(e) => setExpirationDate(e.target.value)}
+              className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-600 outline-none focus:border-green-300 transition-all"
+            />
+          </div>
+        </div>
       )}
 
       <div className="flex items-center justify-between">
@@ -84,7 +95,7 @@ export default function AddItemForm({ onAdd, onCancel }) {
           onClick={() => setShowMore(!showMore)}
           className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
         >
-          {showMore ? "Less options" : "+ Notes"}
+          {showMore ? "Less options" : "+ Notes & Expiry"}
         </button>
         <button
           type="submit"

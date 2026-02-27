@@ -1,5 +1,5 @@
 import React from "react";
-import { Trash2, Check } from "lucide-react";
+import { Trash2, Check, CalendarClock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ListItemRow({ item, onToggle, onDelete }) {
@@ -26,9 +26,15 @@ export default function ListItemRow({ item, onToggle, onDelete }) {
         <p className={cn("text-sm font-medium text-gray-800", item.is_checked && "line-through text-gray-400")}>
           {item.name}
         </p>
-        {(item.quantity || item.notes) && (
-          <p className="text-xs text-gray-400 mt-0.5">
+        {(item.quantity || item.notes || item.expiration_date) && (
+          <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
             {item.quantity}{item.quantity && item.notes ? " · " : ""}{item.notes}
+            {item.expiration_date && (
+              <span className="flex items-center gap-1 text-amber-500">
+                <CalendarClock className="w-3 h-3" />
+                Exp: {new Date(item.expiration_date + "T00:00:00").toLocaleDateString()}
+              </span>
+            )}
           </p>
         )}
       </div>
