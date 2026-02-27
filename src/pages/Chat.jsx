@@ -70,6 +70,15 @@ export default function Chat() {
     }
   };
 
+  const renameConversation = async (convId, newName) => {
+    const conv = conversations.find((c) => c.id === convId);
+    await base44.agents.updateConversation(convId, { metadata: { ...conv?.metadata, name: newName } });
+    setConversations((prev) => prev.map((c) => c.id === convId ? { ...c, metadata: { ...c.metadata, name: newName } } : c));
+    if (activeConversation?.id === convId) {
+      setActiveConversation((prev) => ({ ...prev, metadata: { ...prev.metadata, name: newName } }));
+    }
+  };
+
   const generateAndSetTitle = async (conv, firstMessage) => {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `Generate a short, concise chat title (3-5 words max) for a grocery assistant conversation that starts with this message: "${firstMessage}". Return only the title, no quotes or punctuation.`,
@@ -133,6 +142,7 @@ export default function Chat() {
           activeId={activeConversation?.id}
           onSelect={selectConversation}
           onDelete={deleteConversation}
+          onRename={renameConversation}
           loading={loadingConversations}
         />
       </div>
