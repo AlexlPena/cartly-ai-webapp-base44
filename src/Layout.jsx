@@ -12,6 +12,15 @@ const navItems = [
 
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {
+      base44.auth.redirectToLogin(window.location.href);
+    });
+  }, []);
+
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-[#F7F9F7] flex flex-col">
