@@ -20,12 +20,13 @@ export default function AddItemForm({ onAdd, onCancel }) {
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState("other");
   const [notes, setNotes] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
   const [showMore, setShowMore] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onAdd({ name: name.trim(), quantity: quantity.trim() || undefined, category, notes: notes.trim() || undefined });
+    onAdd({ name: name.trim(), quantity: quantity.trim() || undefined, category, notes: notes.trim() || undefined, expiration_date: expirationDate || undefined });
   };
 
   return (
