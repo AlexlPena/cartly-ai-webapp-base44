@@ -78,7 +78,8 @@ export default function Chat() {
 
   const selectConversation = async (conv) => {
     const full = await base44.agents.getConversation(conv.id);
-    setActiveConversation(full);
+    // Preserve the _record so title generation and rename/delete still work
+    setActiveConversation({ ...full, _record: conv._record });
     setMessages(full.messages || []);
     setSidebarOpen(false);
   };
