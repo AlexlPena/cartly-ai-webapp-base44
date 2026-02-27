@@ -70,12 +70,23 @@ export default function Chat() {
     }
   };
 
+  const generateAndSetTitle = async (conv, firstMessage) => {
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `Generate a short, concise chat title (3-5 words max) for a grocery assistant conversation that starts with this message: "${firstMessage}". Return only the title, no quotes or punctuation.`,
+    });
+    const title = (typeof result === "string" ? result : result?.text || "New Chat").trim();
+    await base44.agents.updateConversation(conv.id, { metadata: { ...conv.metadata, name: title } });
+    setConversations((prev) => prev.map((c) => c.id === conv.id ? { ...c, metadata: { ...c.metadata, name: title } } : c));
+    setActiveConversation((prev) => prev?.id === conv.id ? { ...prev, metadata: { ...prev.metadata, name: title } } : prev);
+  };
+
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
     setInput("");
     setLoading(true);
 
+    const isFirstMessage = !activeConversation || messages.length === 0;
     let conv = activeConversation;
     if (!conv) {
       conv = await createNewConversation();
@@ -85,6 +96,11 @@ export default function Chat() {
     setMessages((prev) => [...prev, { role: "user", content: text }]);
 
     await base44.agents.addMessage(conv, { role: "user", content: text });
+
+    if (isFirstMessage) {
+      generateAndSetTitle(conv, text);
+    }
+
     setLoading(false);
   };
 
