@@ -13,12 +13,26 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+  const [guestMessageCount, setGuestMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
+  const FREE_MESSAGE_LIMIT = 3;
+
   useEffect(() => {
-    loadConversations();
-    // Handle query param
+    const checkAuth = async () => {
+      const authenticated = await base44.auth.isAuthenticated();
+      setIsGuest(!authenticated);
+      if (!authenticated) {
+        // For guests, we don't load conversations (they have none)
+        setLoadingConversations(false);
+      } else {
+        loadConversations();
+      }
+    };
+    checkAuth();
     const params = new URLSearchParams(window.location.search);
     const q = params.get("q");
     if (q) setInput(q);
