@@ -94,7 +94,11 @@ export default function Chat() {
     }
   };
 
-  const renameConversation = (convId, newName) => {
+  const renameConversation = async (convId, newName) => {
+    const conv = conversations.find((c) => c.id === convId);
+    if (conv?._record?.id) {
+      await base44.entities.Conversation.update(conv._record.id, { name: newName });
+    }
     setConversations((prev) => prev.map((c) => c.id === convId ? { ...c, metadata: { ...c.metadata, name: newName } } : c));
     if (activeConversation?.id === convId) {
       setActiveConversation((prev) => ({ ...prev, metadata: { ...prev.metadata, name: newName } }));
