@@ -72,7 +72,7 @@ export default function Chat() {
 
   const renameConversation = async (convId, newName) => {
     const conv = conversations.find((c) => c.id === convId);
-    await base44.agents.updateConversation(convId, { metadata: { ...conv?.metadata, name: newName } });
+    await base44.agents.updateConversation(conv, { metadata: { ...conv?.metadata, name: newName } });
     setConversations((prev) => prev.map((c) => c.id === convId ? { ...c, metadata: { ...c.metadata, name: newName } } : c));
     if (activeConversation?.id === convId) {
       setActiveConversation((prev) => ({ ...prev, metadata: { ...prev.metadata, name: newName } }));
@@ -84,7 +84,7 @@ export default function Chat() {
       prompt: `Generate a short, concise chat title (3-5 words max) for a grocery assistant conversation that starts with this message: "${firstMessage}". Return only the title, no quotes or punctuation.`,
     });
     const title = (typeof result === "string" ? result : result?.text || "New Chat").trim();
-    await base44.agents.updateConversation(conv.id, { metadata: { ...conv.metadata, name: title } });
+    await base44.agents.updateConversation(conv, { metadata: { ...conv.metadata, name: title } });
     setConversations((prev) => prev.map((c) => c.id === conv.id ? { ...c, metadata: { ...c.metadata, name: title } } : c));
     setActiveConversation((prev) => prev?.id === conv.id ? { ...prev, metadata: { ...prev.metadata, name: title } } : prev);
   };
