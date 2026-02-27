@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { ArrowLeft, Plus, Trash2, Check, ShoppingBag } from "lucide-react";
-import ListItemRow from "./ListItemRow";
-import AddItemForm from "./AddItemForm";
+import ListItemRow from "@/components/lists/ListItemRow";
+import AddItemForm from "@/components/lists/AddItemForm";
 
 export default function ListDetail({ list, onBack, onDelete, onUpdate }) {
   const [items, setItems] = useState([]);

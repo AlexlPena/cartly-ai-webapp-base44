@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Plus, Search } from "lucide-react";
-import ListCard from "../components/lists/ListCard";
-import ListDetail from "../components/lists/ListDetail";
-import CreateListModal from "../components/lists/CreateListModal";
+import ListCard from "@/components/lists/ListCard";
+import ListDetail from "@/components/lists/ListDetail";
+import CreateListModal from "@/components/lists/CreateListModal";
 
 export default function Lists() {
   const [lists, setLists] = useState([]);
