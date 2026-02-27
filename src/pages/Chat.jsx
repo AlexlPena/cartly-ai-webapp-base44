@@ -128,6 +128,7 @@ export default function Chat() {
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-[#F7F9F7]">
+      {showSignUpPrompt && <SignUpPrompt onDismiss={() => setShowSignUpPrompt(false)} />}
       {/* Sidebar */}
       <div
         className={`${
