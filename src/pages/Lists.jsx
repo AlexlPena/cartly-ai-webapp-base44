@@ -11,14 +11,18 @@ export default function Lists() {
   const [selectedList, setSelectedList] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [search, setSearch] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    loadLists();
+    base44.auth.me().then((u) => {
+      setUser(u);
+      loadLists(u.email);
+    });
   }, []);
 
-  const loadLists = async () => {
+  const loadLists = async (email) => {
     setLoading(true);
-    const data = await base44.entities.List.filter({ is_archived: false }, "-created_date");
+    const data = await base44.entities.List.filter({ is_archived: false, created_by: email }, "-created_date");
     setLists(data || []);
     setLoading(false);
   };
