@@ -10,6 +10,7 @@ export default function ListDetail({ list, onBack, onDelete, onUpdate }) {
   const [showAdd, setShowAdd] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [nameVal, setNameVal] = useState(list.name);
+  const [editingItemId, setEditingItemId] = useState(null);
 
   useEffect(() => {
     loadItems();
@@ -52,6 +53,13 @@ export default function ListDetail({ list, onBack, onDelete, onUpdate }) {
     const updated = items.filter((i) => i.id !== itemId);
     setItems(updated);
     syncCounts(updated);
+  };
+
+  const updateItem = async (itemId, data) => {
+    const updated_item = await base44.entities.ListItem.update(itemId, data);
+    const updated = items.map((i) => i.id === itemId ? updated_item : i);
+    setItems(updated);
+    setEditingItemId(null);
   };
 
   const saveName = async () => {
@@ -143,12 +151,22 @@ export default function ListDetail({ list, onBack, onDelete, onUpdate }) {
               </p>
               <div className="space-y-2">
                 {catItems.map((item) => (
-                  <ListItemRow
-                    key={item.id}
-                    item={item}
-                    onToggle={toggleItem}
-                    onDelete={deleteItem}
-                  />
+                  editingItemId === item.id ? (
+                    <AddItemForm
+                      key={item.id}
+                      initialData={item}
+                      onSave={(data) => updateItem(item.id, data)}
+                      onCancel={() => setEditingItemId(null)}
+                    />
+                  ) : (
+                    <ListItemRow
+                      key={item.id}
+                      item={item}
+                      onToggle={toggleItem}
+                      onDelete={deleteItem}
+                      onEdit={(i) => setEditingItemId(i.id)}
+                    />
+                  )
                 ))}
               </div>
             </div>

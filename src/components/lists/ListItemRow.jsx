@@ -2,7 +2,7 @@ import React from "react";
 import { Trash2, Check, CalendarClock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export default function ListItemRow({ item, onToggle, onDelete }) {
+export default function ListItemRow({ item, onToggle, onDelete, onEdit }) {
   return (
     <div
       className={cn(
@@ -22,7 +22,7 @@ export default function ListItemRow({ item, onToggle, onDelete }) {
         {item.is_checked && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
       </button>
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 cursor-pointer" onClick={() => onEdit && onEdit(item)}>
         <p className={cn("text-sm font-medium text-gray-800", item.is_checked && "line-through text-gray-400")}>
           {item.name}
         </p>

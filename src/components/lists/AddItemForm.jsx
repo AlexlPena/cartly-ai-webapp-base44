@@ -15,18 +15,24 @@ const categories = [
   { id: "other", label: "📦 Other" },
 ];
 
-export default function AddItemForm({ onAdd, onCancel }) {
-  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("other");
-  const [notes, setNotes] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [showMore, setShowMore] = useState(false);
+export default function AddItemForm({ onAdd, onSave, onCancel, initialData }) {
+  const isEditing = !!initialData;
+  const [name, setName] = useState(initialData?.name || "");
+  const [quantity, setQuantity] = useState(initialData?.quantity || "");
+  const [category, setCategory] = useState(initialData?.category || "other");
+  const [notes, setNotes] = useState(initialData?.notes || "");
+  const [expirationDate, setExpirationDate] = useState(initialData?.expiration_date || "");
+  const [showMore, setShowMore] = useState(!!(initialData?.notes || initialData?.expiration_date));
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onAdd({ name: name.trim(), quantity: quantity.trim() || undefined, category, notes: notes.trim() || undefined, expiration_date: expirationDate || undefined });
+    const data = { name: name.trim(), quantity: quantity.trim() || undefined, category, notes: notes.trim() || undefined, expiration_date: expirationDate || undefined };
+    if (isEditing) {
+      onSave(data);
+    } else {
+      onAdd(data);
+    }
   };
 
   return (
@@ -97,14 +103,25 @@ export default function AddItemForm({ onAdd, onCancel }) {
         >
           {showMore ? "Less options" : "+ Notes & Expiry"}
         </button>
-        <button
-          type="submit"
-          disabled={!name.trim()}
-          className="flex items-center gap-1.5 bg-gray-900 text-white px-4 py-2 rounded-xl text-xs font-medium hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          Add item
-        </button>
+        <div className="flex items-center gap-2">
+          {isEditing && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2 rounded-xl text-xs font-medium text-gray-500 hover:bg-gray-100 transition-all"
+            >
+              Cancel
+            </button>
+          )}
+          <button
+            type="submit"
+            disabled={!name.trim()}
+            className="flex items-center gap-1.5 bg-gray-900 text-white px-4 py-2 rounded-xl text-xs font-medium hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            {isEditing ? "Save Changes" : "Add item"}
+          </button>
+        </div>
       </div>
     </form>
   );
