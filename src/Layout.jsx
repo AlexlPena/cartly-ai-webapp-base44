@@ -95,6 +95,12 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
               );
             })}
+            <button
+              onClick={() => base44.auth.logout()}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-50 w-full"
+            >
+              Sign out
+            </button>
           </div>
         )}
       </header>
