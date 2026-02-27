@@ -37,8 +37,19 @@ export default function Chat() {
 
   const loadConversations = async () => {
     setLoadingConversations(true);
-    const convs = await base44.agents.listConversations({ agent_name: "cartly_agent" });
-    setConversations(convs || []);
+    const [convs, convRecords] = await Promise.all([
+      base44.agents.listConversations({ agent_name: "cartly_agent" }),
+      base44.entities.Conversation.filter({ is_deleted: false }),
+    ]);
+    // Merge persisted names into agent conversations
+    const recordMap = {};
+    (convRecords || []).forEach((r) => { recordMap[r.agent_conversation_id] = r; });
+    const merged = (convs || []).map((c) => ({
+      ...c,
+      metadata: { ...c.metadata, name: recordMap[c.id]?.name || c.metadata?.name || "New Chat" },
+      _record: recordMap[c.id] || null,
+    }));
+    setConversations(merged);
     setLoadingConversations(false);
   };
 
