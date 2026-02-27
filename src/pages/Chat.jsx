@@ -82,6 +82,11 @@ export default function Chat() {
 
   const deleteConversation = async (convId, e) => {
     e.stopPropagation();
+    // Find the DB record and soft-delete it for GDPR compliance
+    const conv = conversations.find((c) => c.id === convId);
+    if (conv?._record?.id) {
+      await base44.entities.Conversation.update(conv._record.id, { is_deleted: true });
+    }
     setConversations((prev) => prev.filter((c) => c.id !== convId));
     if (activeConversation?.id === convId) {
       setActiveConversation(null);
