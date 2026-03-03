@@ -58,6 +58,7 @@ export default function Layout({ children, currentPageName }) {
           </nav>
 
           <div className="flex items-center gap-2">
+            <NotificationBell userEmail={user.email} />
             <span className="hidden md:block text-sm text-gray-500 font-medium">{user.full_name || user.email}</span>
             <button
               onClick={() => base44.auth.logout()}
