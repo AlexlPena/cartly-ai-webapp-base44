@@ -5,6 +5,7 @@ import { ShoppingCart, MessageSquare, List, Home, Menu, X, Settings } from "luci
 import { base44 } from "@/api/base44Client";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import BottomNav from "@/components/layout/BottomNav";
+import RouteTransition from "@/components/layout/RouteTransition";
 
 const navItems = [
   { name: "Home", icon: Home, page: "Home" },
@@ -112,9 +113,11 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Main content */}
       <main className="flex-1 pt-16 pb-[env(safe-area-inset-bottom)] md:pb-0">
-        <div className="pb-20 md:pb-0">
-          {children}
-        </div>
+        <RouteTransition>
+          <div className="pb-20 md:pb-0">
+            {children}
+          </div>
+        </RouteTransition>
       </main>
 
       <BottomNav currentPageName={currentPageName} />
