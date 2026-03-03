@@ -36,18 +36,17 @@ export default function Chat() {
     return () => unsub();
   }, [activeConversation?.id]);
 
-  const loadConversations = async () => {
+  const loadConversations = useCallback(async () => {
     setLoadingConversations(true);
     const user = await base44.auth.me();
     const [convs, convRecords] = await Promise.all([
       base44.agents.listConversations({ agent_name: "cartly_agent" }),
       base44.entities.Conversation.filter({ is_deleted: false, user_email: user.email }),
     ]);
-    // Only show conversations that belong to this user (matched by DB record)
     const recordMap = {};
     (convRecords || []).forEach((r) => { recordMap[r.agent_conversation_id] = r; });
     const merged = (convs || [])
-      .filter((c) => recordMap[c.id]) // only show convs with a DB record for this user
+      .filter((c) => recordMap[c.id])
       .map((c) => ({
         ...c,
         metadata: { ...c.metadata, name: recordMap[c.id]?.name || c.metadata?.name || "New Chat" },
@@ -55,7 +54,7 @@ export default function Chat() {
       }));
     setConversations(merged);
     setLoadingConversations(false);
-  };
+  }, []);
 
   const createNewConversation = async () => {
     const user = await base44.auth.me();
@@ -159,7 +158,7 @@ export default function Chat() {
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 fixed md:relative z-40 w-72 h-full bg-white border-r border-gray-100 flex flex-col transition-transform duration-300`}
+        } md:translate-x-0 fixed md:relative z-40 w-72 h-full bg-white border-r border-gray-100 flex flex-col transition-transform duration-300 overflow-hidden`}
       >
         <div className="p-4 border-b border-gray-100">
           <button
