@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Plus, Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import ListCard from "@/components/lists/ListCard";
 import ListDetail from "@/components/lists/ListDetail";
 import CreateListModal from "@/components/lists/CreateListModal";
@@ -42,21 +43,35 @@ export default function Lists() {
 
   const filtered = lists.filter((l) => l.name?.toLowerCase().includes(search.toLowerCase()));
 
-  if (selectedList) {
-    return (
-      <ListDetail
-        list={selectedList}
-        onBack={() => { setSelectedList(null); loadLists(); }}
-        onDelete={() => handleDeleteList(selectedList.id)}
-        onUpdate={(updated) => {
-          setSelectedList(updated);
-          setLists((prev) => prev.map((l) => l.id === updated.id ? updated : l));
-        }}
-      />
-    );
-  }
-
   return (
+    <AnimatePresence mode="wait">
+    {selectedList ? (
+      <motion.div
+        key="detail"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed inset-0 top-16 bg-[#F7F9F7] z-10 overflow-y-auto"
+      >
+        <ListDetail
+          list={selectedList}
+          onBack={() => { setSelectedList(null); loadLists(); }}
+          onDelete={() => handleDeleteList(selectedList.id)}
+          onUpdate={(updated) => {
+            setSelectedList(updated);
+            setLists((prev) => prev.map((l) => l.id === updated.id ? updated : l));
+          }}
+        />
+      </motion.div>
+    ) : (
+    <motion.div
+      key="list"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
     <div className="max-w-4xl mx-auto px-4 py-10">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
@@ -126,5 +141,8 @@ export default function Lists() {
         <CreateListModal onClose={() => setShowCreate(false)} onCreate={handleCreateList} />
       )}
     </div>
+    </motion.div>
+    )}
+    </AnimatePresence>
   );
 }
