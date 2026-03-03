@@ -4,7 +4,7 @@ import { Plus, Search } from "lucide-react";
 import ListCard from "@/components/lists/ListCard";
 import CreateListModal from "@/components/lists/CreateListModal";
 import PullToRefresh from "@/components/layout/PullToRefresh";
-import ListDetailView from "@/components/lists/ListDetailView";
+import ListDetailView from "@/components/lists/ListDetailView.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 
 function getListIdFromHash() {
