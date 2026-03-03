@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { ArrowLeft, Plus, Trash2, Check, ShoppingBag } from "lucide-react";
+import { ChevronLeft, Plus, Trash2, Check, ShoppingBag } from "lucide-react";
 import ListItemRow from "@/components/lists/ListItemRow";
 import AddItemForm from "@/components/lists/AddItemForm";
 
@@ -88,8 +88,12 @@ export default function ListDetail({ list, onBack, onDelete, onUpdate }) {
     <div className="max-w-2xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <button onClick={onBack} className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-all">
-          <ArrowLeft className="w-5 h-5" />
+        <button
+          onClick={onBack}
+          className="flex items-center gap-1 text-green-600 font-medium text-sm hover:text-green-700 transition-all select-none -ml-1 pr-2 py-1"
+        >
+          <ChevronLeft className="w-5 h-5" />
+          <span>Lists</span>
         </button>
         <div className="flex-1">
           {editingName ? (
