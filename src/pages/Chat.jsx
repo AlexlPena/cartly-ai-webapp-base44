@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { Send, Plus, MessageSquare, Trash2, ChevronLeft, Sparkles } from "lucide-react";
 import MessageBubble from "@/components/chat/MessageBubble";
 import ConversationList from "@/components/chat/ConversationList";
+import PullToRefresh from "@/components/layout/PullToRefresh";
 
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
