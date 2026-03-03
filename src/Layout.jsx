@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ShoppingCart, MessageSquare, List, Home, Menu, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const navItems = [
   { name: "Home", icon: Home, page: "Home" },
