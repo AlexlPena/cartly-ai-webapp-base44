@@ -51,6 +51,7 @@ import Chat from './pages/Chat';
 import Home from './pages/Home';
 import Lists from './pages/Lists';
 import Account from './pages/Account';
+import ListDetail from './pages/ListDetail';
 import __Layout from './Layout.jsx';
 
 
@@ -59,6 +60,7 @@ export const PAGES = {
     "Home": Home,
     "Lists": Lists,
     "Account": Account,
+    "ListDetail": ListDetail,
 }
 
 export const pagesConfig = {
