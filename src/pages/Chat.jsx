@@ -169,14 +169,16 @@ export default function Chat() {
             New Chat
           </button>
         </div>
-        <ConversationList
-          conversations={conversations}
-          activeId={activeConversation?.id}
-          onSelect={selectConversation}
-          onDelete={deleteConversation}
-          onRename={renameConversation}
-          loading={loadingConversations}
-        />
+        <PullToRefresh onRefresh={loadConversations} className="flex-1 overflow-y-auto">
+          <ConversationList
+            conversations={conversations}
+            activeId={activeConversation?.id}
+            onSelect={selectConversation}
+            onDelete={deleteConversation}
+            onRename={renameConversation}
+            loading={loadingConversations}
+          />
+        </PullToRefresh>
       </div>
 
       {/* Overlay for mobile */}
