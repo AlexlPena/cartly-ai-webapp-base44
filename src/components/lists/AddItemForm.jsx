@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { X, Plus } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { X, Plus, ChevronDown, Check } from "lucide-react";
 
 const categories = [
   { id: "produce", label: "🥦 Produce" },
@@ -23,6 +23,18 @@ export default function AddItemForm({ onAdd, onSave, onCancel, initialData }) {
   const [notes, setNotes] = useState(initialData?.notes || "");
   const [expirationDate, setExpirationDate] = useState(initialData?.expiration_date || "");
   const [showMore, setShowMore] = useState(!!(initialData?.notes || initialData?.expiration_date));
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
+  const categoryRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
+        setShowCategoryPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,15 +76,31 @@ export default function AddItemForm({ onAdd, onSave, onCancel, initialData }) {
           placeholder="Qty (e.g. 2, 500g)"
           className="w-32 px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-700 placeholder-gray-400 outline-none focus:border-green-300 transition-all"
         />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-700 outline-none focus:border-green-300 transition-all bg-white"
-        >
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>{c.label}</option>
-          ))}
-        </select>
+        <div className="relative flex-1" ref={categoryRef}>
+          <button
+            type="button"
+            onClick={() => setShowCategoryPicker((p) => !p)}
+            className="w-full flex items-center justify-between px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-700 bg-white select-none focus:border-green-300 transition-all"
+          >
+            <span>{categories.find((c) => c.id === category)?.label || "Category"}</span>
+            <ChevronDown className="w-3.5 h-3.5 text-gray-400 ml-1 shrink-0" />
+          </button>
+          {showCategoryPicker && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-100 rounded-xl shadow-xl z-50 max-h-52 overflow-y-auto">
+              {categories.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => { setCategory(c.id); setShowCategoryPicker(false); }}
+                  className="w-full flex items-center justify-between px-3 py-2.5 text-xs text-gray-700 hover:bg-green-50 transition-all select-none"
+                >
+                  <span>{c.label}</span>
+                  {category === c.id && <Check className="w-3.5 h-3.5 text-green-500" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {showMore && (
