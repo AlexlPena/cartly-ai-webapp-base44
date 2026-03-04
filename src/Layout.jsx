@@ -112,9 +112,9 @@ export default function Layout({ children, currentPageName }) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 pt-16 pb-[env(safe-area-inset-bottom)] md:pb-0">
+      <main className="flex-1 pt-16" style={{ minHeight: "calc(100dvh - 64px)" }}>
         <RouteTransition>
-          <div className="pb-20 md:pb-0">
+          <div className="pb-20 md:pb-0" style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px)" }}>
             {children}
           </div>
         </RouteTransition>
