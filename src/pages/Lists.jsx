@@ -172,7 +172,8 @@ export default function Lists() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 32 }}
-            className="fixed inset-0 top-16 bg-[#F7F9F7] z-10 overflow-y-auto pb-20 md:pb-0"
+            className="fixed inset-0 top-16 bg-[#F7F9F7] z-10 overflow-y-auto"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 80px)" }}
           >
             <ListDetailView
               listId={selectedListId}
