@@ -1,0 +1,42 @@
+{
+  "name": "List",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the grocery list"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description or context for the list"
+    },
+    "color": {
+      "type": "string",
+      "description": "Color tag for the list",
+      "enum": [
+        "green",
+        "blue",
+        "orange",
+        "purple",
+        "pink",
+        "yellow"
+      ]
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the list is archived"
+    },
+    "total_items": {
+      "type": "number",
+      "description": "Total number of items in the list"
+    },
+    "completed_items": {
+      "type": "number",
+      "description": "Number of completed items"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

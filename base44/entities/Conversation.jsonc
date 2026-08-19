@@ -1,0 +1,28 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "agent_conversation_id": {
+      "type": "string",
+      "description": "The ID of the conversation in the Base44 agents system"
+    },
+    "name": {
+      "type": "string",
+      "description": "User-facing title of the conversation",
+      "default": "New Chat"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who owns this conversation"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft delete flag for GDPR compliance"
+    }
+  },
+  "required": [
+    "agent_conversation_id",
+    "user_email"
+  ]
+}

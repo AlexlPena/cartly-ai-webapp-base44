@@ -1,0 +1,46 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user this notification belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short notification title"
+    },
+    "message": {
+      "type": "string",
+      "description": "Full notification message"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "expiration_warning",
+        "expiration_critical",
+        "info"
+      ],
+      "default": "info",
+      "description": "Type of notification"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has read this notification"
+    },
+    "list_id": {
+      "type": "string",
+      "description": "ID of the related list (if applicable)"
+    },
+    "item_id": {
+      "type": "string",
+      "description": "ID of the related list item (if applicable)"
+    }
+  },
+  "required": [
+    "user_email",
+    "title",
+    "message"
+  ]
+}

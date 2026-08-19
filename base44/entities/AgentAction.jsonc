@@ -1,0 +1,38 @@
+{
+  "name": "AgentAction",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string",
+      "description": "ID of the conversation this action belongs to"
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Type of action performed",
+      "enum": [
+        "list_created",
+        "list_updated",
+        "list_deleted",
+        "item_added",
+        "item_updated",
+        "item_deleted",
+        "suggestion_given"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the entity that was acted upon"
+    },
+    "entity_name": {
+      "type": "string",
+      "description": "Name of the entity"
+    },
+    "details": {
+      "type": "string",
+      "description": "Additional details about the action"
+    }
+  },
+  "required": [
+    "action_type"
+  ]
+}

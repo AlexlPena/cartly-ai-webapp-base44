@@ -1,0 +1,62 @@
+{
+  "name": "ListItem",
+  "type": "object",
+  "properties": {
+    "list_id": {
+      "type": "string",
+      "description": "ID of the parent list"
+    },
+    "name": {
+      "type": "string",
+      "description": "Item name"
+    },
+    "quantity": {
+      "type": "string",
+      "description": "Quantity or amount (e.g. 2, 500g, 1 bunch)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category of the item",
+      "enum": [
+        "produce",
+        "meat_seafood",
+        "dairy_eggs",
+        "bakery",
+        "pantry",
+        "frozen",
+        "beverages",
+        "snacks",
+        "household",
+        "personal_care",
+        "other"
+      ]
+    },
+    "is_checked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the item has been checked off"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the item"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium"
+    },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional expiration date for the item (YYYY-MM-DD)"
+    }
+  },
+  "required": [
+    "list_id",
+    "name"
+  ]
+}
